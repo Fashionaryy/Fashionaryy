@@ -1,2 +1,2 @@
 # Fashionary
-it s your dictionary
+it is your dictionary
