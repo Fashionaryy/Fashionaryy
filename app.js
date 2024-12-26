@@ -1,14 +1,25 @@
 const modelPath = './model_quantized.tflite'; // Path to your TFLite model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
 
-console.log('Loading model...');
-const tflite = await tfliteModel.loadTFLiteModel(modelPath);
-console.log('Model loaded successfully!');
+async function loadModelAndDataset() {
+  try {
+    console.log('Loading model...');
+    const tflite = await tfliteModel.loadTFLiteModel(modelPath);
+    model = tflite;
+    console.log('Model loaded successfully!');
 
-console.log('Loading dataset...');
-const response = await fetch(datasetPath);
-dataset = await response.json();
-console.log('Dataset loaded successfully!', dataset);
+    console.log('Loading dataset...');
+    const response = await fetch(datasetPath);
+    dataset = await response.json();
+    console.log('Dataset loaded successfully!');
+  } catch (error) {
+    console.error('Error loading model or dataset:', error);
+    alert('Failed to load the AI model or dataset. Please check the console for details.');
+  }
+}
+
+// Call the function after defining it
+loadModelAndDataset();
 
 let model;
 let dataset;
