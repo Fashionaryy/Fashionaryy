@@ -1,6 +1,15 @@
 const modelPath = './model_quantized.tflite'; // Path to your TFLite model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
 
+console.log('Loading model...');
+const tflite = await tfliteModel.loadTFLiteModel(modelPath);
+console.log('Model loaded successfully!');
+
+console.log('Loading dataset...');
+const response = await fetch(datasetPath);
+dataset = await response.json();
+console.log('Dataset loaded successfully!', dataset);
+
 let model;
 let dataset;
 
