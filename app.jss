@@ -52,25 +52,40 @@ function isColorSimilar(color1, color2) {
   return distance < 50; // Adjust threshold as needed
 }
 
-// Render matching products with links to their files
+// Render matching products with thumbnails
 function renderMatchingProducts(products) {
   const productList = document.getElementById('productList');
   productList.innerHTML = ''; // Clear previous results
 
+  if (products.length === 0) {
+    // Display error message if no matches found
+    const errorMessage = document.createElement('p');
+    errorMessage.textContent = 'No matching products found. Please try a different image.';
+    productList.appendChild(errorMessage);
+    return;
+  }
+
   products.forEach(product => {
     const li = document.createElement('li');
+    li.style.display = 'flex';
+    li.style.alignItems = 'center';
+    li.style.marginBottom = '10px';
+
+    // Add product image (thumbnail)
+    if (product.file) {
+      const img = document.createElement('img');
+      img.src = `matched_items/${product.file}`;
+      img.alt = product.name;
+      img.style.width = '50px';
+      img.style.height = '50px';
+      img.style.marginRight = '10px';
+      li.appendChild(img);
+    }
 
     // Add product name and color
-    li.textContent = `${product.name} (${product.color.join(', ')})`;
-
-    // Add link to product file if available
-    if (product.file) {
-      const link = document.createElement('a');
-      link.href = `matched_items/${product.file}`;
-      link.textContent = ' [View Item]';
-      link.target = '_blank'; // Open in new tab
-      li.appendChild(link);
-    }
+    const productText = document.createElement('span');
+    productText.textContent = `${product.name} (${product.color.join(', ')})`;
+    li.appendChild(productText);
 
     productList.appendChild(li);
   });
