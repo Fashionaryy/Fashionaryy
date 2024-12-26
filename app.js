@@ -147,6 +147,7 @@ function downloadCSV(products) {
 
 // Main function to handle image upload and processing
 document.getElementById('classifyButton').addEventListener('click', async () => {
+console.log('Button clicked!'); // Debug: Check if the button is firing
   const imageInput = document.getElementById('imageInput');
   if (!imageInput.files[0]) {
     alert('Please upload an image!');
