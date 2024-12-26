@@ -8,6 +8,7 @@ let dataset;
 async function loadModelAndDataset() {
   const tflite = await tfliteModel.loadTFLiteModel(modelPath); // Load TFLite model
   model = tflite;
+
   const response = await fetch(datasetPath); // Load dataset
   dataset = await response.json();
 }
@@ -31,10 +32,35 @@ async function classifyImage(imageElement) {
   return categories[categoryIndex];
 }
 
-// Get dominant color
-function getDominantColor(imageElement) {
+// Get dominant color of the item
+function getItemColor(imageElement) {
+  // Create a canvas for center cropping
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const width = imageElement.naturalWidth;
+  const height = imageElement.naturalHeight;
+
+  // Define a central square crop
+  const cropSize = Math.min(width, height) * 0.5; // Central square crop (50% of the smaller dimension)
+  const startX = (width - cropSize) / 2;
+  const startY = (height - cropSize) / 2;
+
+  canvas.width = cropSize;
+  canvas.height = cropSize;
+
+  // Draw the central cropped area
+  ctx.drawImage(imageElement, startX, startY, cropSize, cropSize, 0, 0, cropSize, cropSize);
+
+  // Get cropped image data URL
+  const croppedImage = canvas.toDataURL();
+  const croppedImgElement = new Image();
+  croppedImgElement.src = croppedImage;
+
+  // Extract dominant color using Color Thief
   const colorThief = new ColorThief();
-  const dominantColor = colorThief.getColor(imageElement); // Returns [R, G, B]
+  const dominantColor = colorThief.getColor(croppedImgElement);
+
   return dominantColor;
 }
 
@@ -134,7 +160,7 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
   imageElement.src = URL.createObjectURL(imageFile);
   imageElement.onload = async () => {
     const category = await classifyImage(imageElement);
-    const color = getDominantColor(imageElement);
+    const color = getItemColor(imageElement);
     const matchingProducts = matchProducts(category, color);
     renderMatchingProducts(matchingProducts);
     toggleLoading(false); // Hide the loading spinner
