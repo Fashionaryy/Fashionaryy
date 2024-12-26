@@ -26,9 +26,26 @@
     <p>Discover fashion inspiration, upload your own outfit photos, and explore our featured products.</p>
     <button>Search</button>
   </section>
+
+  <h3>Upload Your Product Image</h3>
+<form id="uploadForm">
+  <input type="file" id="imageInput" accept="image/*" />
+  <button type="button" id="classifyButton">Classify & Find Products</button>
+</form>
+
+  <!-- Loading Spinner -->
+<div id="loadingSpinner" style="display: none;">
+  <p>Loading... Please wait.</p>
+</div>
+
+<!-- Placeholder for Results -->
+<div id="result">
+  <h2>Matching Products</h2>
+  <ul id="productList"></ul>
+</div>
   
   <section class="featured-products">
-    <h3>Featured Products</h3>
+    <h4>Featured Products</h4>
     <div class="product-grid">
       <div class="product">
         <img src=".jpg" alt="Product 1">
