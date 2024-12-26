@@ -12,6 +12,12 @@ async function loadModelAndDataset() {
   dataset = await response.json();
 }
 
+// Show or hide the loading spinner
+function toggleLoading(show) {
+  const spinner = document.getElementById('loadingSpinner');
+  spinner.style.display = show ? 'block' : 'none';
+}
+
 // Classify image
 async function classifyImage(imageElement) {
   const tensor = tf.browser
@@ -89,6 +95,28 @@ function renderMatchingProducts(products) {
 
     productList.appendChild(li);
   });
+
+  // Add a button to download the results as a CSV file
+  const downloadButton = document.createElement('button');
+  downloadButton.textContent = 'Download Results as CSV';
+  downloadButton.onclick = () => downloadCSV(products);
+  productList.appendChild(downloadButton);
+}
+
+// Download results as a CSV file
+function downloadCSV(products) {
+  const csvContent = [
+    ['Name', 'Category', 'Color'].join(','), // Header row
+    ...products.map(product => [product.name, product.category, product.color.join(' ')].join(','))
+  ].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'matching_products.csv';
+  link.click();
 }
 
 // Main function to handle image upload and processing
@@ -99,6 +127,8 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
     return;
   }
 
+  toggleLoading(true); // Show the loading spinner
+
   const imageFile = imageInput.files[0];
   const imageElement = document.createElement('img');
   imageElement.src = URL.createObjectURL(imageFile);
@@ -107,6 +137,7 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
     const color = getDominantColor(imageElement);
     const matchingProducts = matchProducts(category, color);
     renderMatchingProducts(matchingProducts);
+    toggleLoading(false); // Hide the loading spinner
   };
 });
 
