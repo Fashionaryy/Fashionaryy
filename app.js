@@ -6,7 +6,6 @@ let model; // Variable to hold the loaded model
 let dataset; // Variable to hold the dataset
 let similarityThreshold = 50; // Default similarity threshold for color matching
 
-// Load the TFLite model and dataset
 async function loadModelAndDataset() {
   try {
     console.log('Loading model...');
@@ -23,6 +22,7 @@ async function loadModelAndDataset() {
     alert('Failed to load the AI model or dataset. Please check the console for details.');
   }
 }
+
 
 // Get dominant color of the image (using canvas)
 function getItemColor(imageElement) {
