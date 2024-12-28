@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fashinary - Fashion Inspiration</title>
   <link rel="stylesheet" href="CSS.css">
- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite"></script>
 </head>
 <body>
   <header>
-     <div class="logo">
-        <img src="images/logo.png" alt="Fashinary Logo">
-     </div>
+    <div class="logo">
+      <img src="images/logo.png" alt="Fashinary Logo">
+    </div>
     <nav>
       <a href="#">Home</a>
       <a href="#">Featured</a>
@@ -30,41 +29,31 @@
   </section>
   
   <!-- Image Upload Section -->
-  <section class="upload">
+  <section class="upload-section">
     <h3>Upload Your Product Image</h3>
-    <form id="uploadForm">
+    <form id="uploadForm" class="upload-form">
       <input type="file" id="imageInput" accept="image/*" />
       <button type="button" id="classifyButton">Classify & Find Products</button>
     </form>
-   <!-- Loading Spinner -->
-<div id="loadingSpinner" style="display: none;">
-  <div class="spinner"></div>
-  <p>Loading... Please wait.</p>
-</div>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner">
+      <div class="spinner"></div>
+      <p>Loading... Please wait.</p>
+    </div>
+  </section>
   
   <!-- Matching Results Section -->
-  <section id="result">
+  <section id="result" class="results-section">
     <h3>Matching Products</h3>
     <ul id="productList"></ul>
   </section>
   
-  <section class="featured-products">
-    <h3>Featured Products</h3>
-    <div class="product-grid">
-      <div class="product">
-        <img src=".jpg" alt="Product 1">
-        <p>Product 1</p>
-      </div>
-      <div class="product">
-        <img src=".jpg" alt="Product 2">
-        <p>Product 2</p>
-      </div>
-      <!-- Add more product items here -->
-    </div>
-  </section>
-  
+
   <footer>
     <p>© 2024 Fashinary</p>
   </footer>
+
+  <!-- Include JavaScript -->
+  <script src="app.js"></script>
 </body>
 </html>
