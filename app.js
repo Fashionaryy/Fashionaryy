@@ -21,7 +21,7 @@ async function setBackend() {
 setBackend();
 
 // Paths to model and dataset
-const modelPath = './model_quantized.tflite'; // Path to your TFLite model
+const modelPath = './model_integer_quantized.tflite'; // Path to your integer quantized TFLite model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
 
 let model; // Variable to hold the loaded model
@@ -50,7 +50,6 @@ async function loadModelAndDataset() {
     alert('Failed to load the AI model or dataset. Please check the console for details.');
   }
 }
-
 
 // Get dominant color of the image (using canvas)
 function getItemColor(imageElement) {
