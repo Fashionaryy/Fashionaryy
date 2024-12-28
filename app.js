@@ -6,12 +6,12 @@ let similarityThreshold = 50; // Default color similarity threshold
 async function loadModelAndDataset() {
   try {
     console.log('Loading model...');
-    const tflite = await tfliteModel.loadTFLiteModel(modelPath);
+    const tflite = await tflite.loadTFLiteModel(modelPath); // Load TFLite model
     model = tflite;
     console.log('Model loaded successfully!');
 
     console.log('Loading dataset...');
-    const response = await fetch(datasetPath);
+    const response = await fetch(datasetPath); // Load dataset
     dataset = await response.json();
     console.log('Dataset loaded successfully!');
   } catch (error) {
