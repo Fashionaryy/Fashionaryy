@@ -8,9 +8,15 @@ let similarityThreshold = 50; // Default similarity threshold for color matching
 
 async function loadModelAndDataset() {
   try {
+    // Check if the tflite object is available
+    if (typeof tflite === 'undefined') {
+      throw new Error('TensorFlow Lite library is not loaded correctly');
+    }
+
     console.log('Loading model...');
-    const tflite = await tflite.loadTFLiteModel(modelPath); // Initialize TFLite model
-    model = tflite;
+    // Ensure that the model is loaded properly
+    const tfliteModel = await tflite.loadTFLiteModel(modelPath); // Initialize TFLite model
+    model = tfliteModel; // Store model in the global variable
     console.log('Model loaded successfully!');
 
     console.log('Loading dataset...');
