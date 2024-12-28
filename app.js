@@ -1,3 +1,25 @@
+// Set TensorFlow.js Backend
+// Try WebAssembly (WASM) as the first option, fallback to WebGL, then CPU
+async function setBackend() {
+  try {
+    await tf.setBackend('wasm'); // Set WebAssembly backend
+    console.log('WASM backend is enabled.');
+  } catch (error) {
+    console.warn('WASM backend failed. Trying WebGL...');
+    try {
+      await tf.setBackend('webgl'); // Fallback to WebGL
+      console.log('WebGL backend is enabled.');
+    } catch (error) {
+      console.warn('WebGL backend failed. Using CPU backend...');
+      await tf.setBackend('cpu'); // Fallback to CPU
+      console.log('CPU backend is enabled.');
+    }
+  }
+}
+
+// Call setBackend before loading the model
+setBackend();
+
 // Paths to model and dataset
 const modelPath = './model_quantized.tflite'; // Path to your TFLite model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
