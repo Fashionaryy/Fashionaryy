@@ -1,6 +1,8 @@
 const modelPath = './model_quantized.tflite'; // Path to your TFLite model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
 
+let similarityThreshold = 50; // Default color similarity threshold
+
 async function loadModelAndDataset() {
   try {
     console.log('Loading model...');
@@ -24,15 +26,6 @@ loadModelAndDataset();
 let model;
 let dataset;
 
-// Load the TFLite model and dataset
-async function loadModelAndDataset() {
-  const tflite = await tfliteModel.loadTFLiteModel(modelPath); // Load TFLite model
-  model = tflite;
-
-  const response = await fetch(datasetPath); // Load dataset
-  dataset = await response.json();
-}
-
 // Show or hide the loading spinner
 function toggleLoading(show) {
   const spinner = document.getElementById('loadingSpinner');
@@ -52,9 +45,9 @@ async function classifyImage(imageElement) {
   return categories[categoryIndex];
 }
 
-// Get dominant color of the item
+// Get dominant color of the item (local method)
 function getItemColor(imageElement) {
-  // Create a canvas for center cropping
+  // Create a canvas to process the image
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
@@ -72,26 +65,45 @@ function getItemColor(imageElement) {
   // Draw the central cropped area
   ctx.drawImage(imageElement, startX, startY, cropSize, cropSize, 0, 0, cropSize, cropSize);
 
-  // Get cropped image data URL
-  const croppedImage = canvas.toDataURL();
-  const croppedImgElement = new Image();
-  croppedImgElement.src = croppedImage;
+  // Get image data from the cropped area
+  const imageData = ctx.getImageData(0, 0, cropSize, cropSize);
+  const pixels = imageData.data;
 
-  // Extract dominant color using Color Thief
-  const colorThief = new ColorThief();
-  const dominantColor = colorThief.getColor(croppedImgElement);
+  let r = 0, g = 0, b = 0, count = 0;
 
-  return dominantColor;
+  // Loop through each pixel and calculate the average color
+  for (let i = 0; i < pixels.length; i += 4) {
+    r += pixels[i];     // Red
+    g += pixels[i + 1]; // Green
+    b += pixels[i + 2]; // Blue
+    count++;
+  }
+
+  // Calculate average RGB values
+  r = Math.floor(r / count);
+  g = Math.floor(g / count);
+  b = Math.floor(b / count);
+
+  return [r, g, b];
 }
 
 // Match products based on category and color
 function matchProducts(category, color) {
-  return dataset.filter(product => {
+  // First, filter products by category and similar color
+  let matchingProducts = dataset.filter(product => {
     return (
       product.category === category &&
       isColorSimilar(product.color, color)
     );
   });
+
+  // If no matching products are found, use fallback to return items in the same category
+  if (matchingProducts.length === 0) {
+    console.log('No exact color match found. Returning items from the same category.');
+    matchingProducts = dataset.filter(product => product.category === category);
+  }
+
+  return matchingProducts;
 }
 
 // Check if colors are similar
@@ -101,7 +113,7 @@ function isColorSimilar(color1, color2) {
     Math.pow(color1[1] - color2[1], 2) +
     Math.pow(color1[2] - color2[2], 2)
   );
-  return distance < 50; // Adjust threshold as needed
+  return distance < similarityThreshold; // Use dynamic threshold value
 }
 
 // Render matching products with thumbnails
@@ -165,9 +177,15 @@ function downloadCSV(products) {
   link.click();
 }
 
+// Handle similarity threshold changes
+document.getElementById('thresholdSlider').addEventListener('input', (event) => {
+  similarityThreshold = event.target.value;
+  document.getElementById('thresholdValue').textContent = similarityThreshold;
+});
+
 // Main function to handle image upload and processing
 document.getElementById('classifyButton').addEventListener('click', async () => {
-console.log('Button clicked!'); // Debug: Check if the button is firing
+  console.log('Button clicked!'); // Debug: Check if the button is firing
   const imageInput = document.getElementById('imageInput');
   if (!imageInput.files[0]) {
     alert('Please upload an image!');
