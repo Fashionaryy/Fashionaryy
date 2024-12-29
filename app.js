@@ -1,5 +1,4 @@
 // Set TensorFlow.js Backend
-// Try WebAssembly (WASM) as the first option, fallback to WebGL, then CPU
 async function setBackend() {
   try {
     await tf.setBackend('wasm'); // Set WebAssembly backend
@@ -21,7 +20,7 @@ async function setBackend() {
 setBackend();
 
 // Paths to model and dataset
-const modelPath = './model_integer_quantized.tflite'; // Path to your integer quantized TFLite model
+const modelPath = './model_tfjs/model.json'; // Path to the TensorFlow.js converted model
 const datasetPath = './dataset.json'; // Path to your dataset JSON
 
 let model; // Variable to hold the loaded model
@@ -30,15 +29,14 @@ let similarityThreshold = 50; // Default similarity threshold for color matching
 
 async function loadModelAndDataset() {
   try {
-    // Check if the tflite object is available
-    if (typeof tflite === 'undefined') {
-      throw new Error('TensorFlow Lite library is not loaded correctly');
+    // Check if TensorFlow.js is loaded
+    if (typeof tf === 'undefined') {
+      throw new Error('TensorFlow.js library is not loaded correctly');
     }
 
     console.log('Loading model...');
-    // Ensure that the model is loaded properly
-    const tfliteModel = await tflite.loadTFLiteModel(modelPath); // Initialize TFLite model
-    model = tfliteModel; // Store model in the global variable
+    // Load the model (TensorFlow.js format)
+    model = await tf.loadLayersModel(modelPath); // Use TensorFlow.js's loadLayersModel for H5 models
     console.log('Model loaded successfully!');
 
     console.log('Loading dataset...');
@@ -87,7 +85,7 @@ async function classifyImage(imageElement) {
     .resizeNearestNeighbor([224, 224]) // Resize image for the model
     .toFloat()
     .expandDims();
-  const predictions = model.predict(tensor); // Get predictions from the model
+  const predictions = await model.predict(tensor); // Get predictions from the model
   const categories = ['coats', 'boots', 'pants', 'skirts', 'sweaters']; // Example categories
   const categoryIndex = predictions.argMax(1).dataSync()[0]; // Get category index
   return categories[categoryIndex];
