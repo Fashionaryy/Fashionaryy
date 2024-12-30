@@ -43,10 +43,12 @@ nav a {
   font-size: 1em;
 }
 
-nav a:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
+
+    nav a:hover {
+      color: var(--text-primary);
+      text-decoration: underline;
+    }
+
 
 /* Hero Section */
 .hero {
