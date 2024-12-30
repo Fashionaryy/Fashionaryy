@@ -1,83 +1,115 @@
 async function setBackend() {
-  try {
-    await tf.setBackend('wasm'); // WebAssembly backend
-    console.log('WASM backend is enabled.');
-  } catch (error) {
-    console.warn('WASM backend failed. Trying WebGL...');
     try {
-      await tf.setBackend('webgl'); // WebGL fallback
-      console.log('WebGL backend is enabled.');
+        await tf.setBackend('wasm');
+        console.log('WASM backend is enabled.');
     } catch (error) {
-      console.warn('WebGL backend failed. Using CPU backend...');
-      await tf.setBackend('cpu'); // CPU fallback
-      console.log('CPU backend is enabled.');
+        console.warn('WASM backend failed. Trying WebGL...');
+        try {
+            await tf.setBackend('webgl');
+            console.log('WebGL backend is enabled.');
+        } catch (error) {
+            console.warn('WebGL backend failed. Using CPU backend...');
+            await tf.setBackend('cpu');
+            console.log('CPU backend is enabled.');
+        }
     }
-  }
 }
 
-// Model ve dataset yolları
-const modelPath = './model_tfjs/model.json'; // TensorFlow.js model dosyası yolu
-const datasetPath = './dataset.json'; // Dataset JSON dosyası yolu
+const modelPath = './model_tfjs/model.json';
+const datasetPath = './dataset.json';
+let model;
+let dataset;
 
-let model; // Model yeri
-let dataset; // Dataset yeri
-
-// Model ve dataset yükleme
 async function loadModelAndDataset() {
-  try {
-    if (typeof tf === 'undefined') {
-      throw new Error('TensorFlow.js library is not loaded correctly');
+    try {
+        if (typeof tf === 'undefined') {
+            throw new Error('TensorFlow.js library is not loaded correctly');
+        }
+        console.log('Loading TensorFlow backend...');
+        await setBackend();
+        console.log('Loading model...');
+        model = await tf.loadLayersModel(modelPath);
+        console.log('Model loaded successfully!');
+        console.log('Loading dataset...');
+        const response = await fetch(datasetPath);
+        if (!response.ok) throw new Error(`Failed to fetch dataset: ${response.statusText}`);
+        dataset = await response.json();
+        console.log('Dataset loaded successfully!');
+    } catch (error) {
+        console.error('Error loading model or dataset:', error);
+        alert('Failed to load the AI model or dataset. Please check the console for details.');
+    }
+}
+
+function getItemColor(imageElement) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const scale = 100;
+    canvas.width = Math.min(imageElement.width, scale);
+    canvas.height = Math.min(imageElement.height, scale);
+    ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    let r = 0, g = 0, b = 0, count = 0;
+    for (let i = 0; i < pixels.length; i += 4) {
+        r += pixels[i];
+        g += pixels[i + 1];
+        b += pixels[i + 2];
+        count++;
+    }
+    return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
+}
+
+async function classifyImage(imageElement) {
+    if (!model) {
+        throw new Error('Model is not loaded.');
     }
 
-    console.log('Loading TensorFlow backend...');
-    await setBackend(); // Backend ayarını bekle
+    try {
+        // Görüntüyü TensorFlow.js tensörüne dönüştür
+        const tfImage = tf.browser.fromPixels(imageElement).toFloat();
 
-    console.log('Loading model...');
-    model = await tf.loadLayersModel(modelPath);
-    console.log('Model loaded successfully!');
+        // Görüntüyü modelin beklediği boyuta yeniden boyutlandır
+        const resizedImage = tf.image.resizeBilinear(tfImage, [model.inputs[0].shape[1], model.inputs[0].shape[2]]);
 
-    console.log('Loading dataset...');
-    const response = await fetch(datasetPath);
-    if (!response.ok) throw new Error(`Failed to fetch dataset: ${response.statusText}`);
-    dataset = await response.json();
-    console.log('Dataset loaded successfully!');
-  } catch (error) {
-    console.error('Error loading model or dataset:', error);
-    alert('Failed to load the AI model or dataset. Please check the console for details.');
-  }
+        // Görüntüyü normalleştir (0-1 aralığına)
+        const normalizedImage = resizedImage.div(255);
+
+        // Batch boyutu ekle (model genellikle batch'ler halinde giriş bekler)
+        const input = normalizedImage.expandDims(0);
+
+        // Tahmin yap
+        const predictions = await model.predict(input).data();
+      console.log("Tahminler:",predictions)
+        // Tahminleri işle (örneğin, en yüksek olasılıklı sınıfı bul)
+        const predictedClass = predictions.indexOf(Math.max(...predictions));
+        console.log("Tahmin Edilen Sınıf:", predictedClass);
+        return predictedClass; // veya diğer tahmin sonuçları
+    } catch (error) {
+        console.error("Görüntü sınıflandırma hatası:", error);
+        return null; // veya bir hata değeri
+    }
 }
 
-// Görüntünün dominant rengini bulma
-function getItemColor(imageElement) {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+// Örnek kullanım (bir resim yüklendikten sonra)
+async function processImage(imageElement) {
+    await loadModelAndDataset(); // Model ve dataset yüklenmesini bekle
+    if(model){
+    const dominantColor = getItemColor(imageElement);
+    console.log("Baskın Renk:", dominantColor);
 
-  // Optimize edilmiş boyutlandırma
-  const scale = 100; // Sabit boyut
-  canvas.width = Math.min(imageElement.width, scale);
-  canvas.height = Math.min(imageElement.height, scale);
-
-  ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const pixels = imageData.data;
-
-  let r = 0, g = 0, b = 0, count = 0;
-
-  for (let i = 0; i < pixels.length; i += 4) {
-    r += pixels[i];
-    g += pixels[i + 1];
-    b += pixels[i + 2];
-    count++;
-  }
-
-  return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
+    const predictedClass = await classifyImage(imageElement);
+    if (predictedClass !== null) {
+        console.log("Sınıflandırma Başarılı!");
+    } else {
+        console.log("Sınıflandırma Başarısız!");
+    }
 }
-
-// Görüntüyü sınıflandırma
-async function classifyImage(imageElement) {
-  if (!model) {
-    throw new Error('Model is not loaded.');
-  }
+}
+//sayfa yüklendiğinde model ve dataset yükleme
+window.addEventListener('load', (event) => {
+    loadModelAndDataset();
+});
 
   const tensor = tf.browser
     .fromPixels(imageElement) // Görüntüyü tensora çevir
