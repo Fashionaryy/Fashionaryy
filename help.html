@@ -11,6 +11,33 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite"></script>
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.ico">
+
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 20px;
+    }
+    .question {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+    .answer {
+      display: none;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+    }
+  </style>
+
+
+  
 </head>
 <body>
   <header>
@@ -24,6 +51,35 @@
       <a href="help.html">Help</a>
       <a href="Contact.html">Contact</a>
     </nav>
+
+
+<div>
+    <div class="question" onclick="toggleAnswer(1)">1. HTML nedir?</div>
+    <div id="answer-1" class="answer">HTML, web sayfalarının yapısını oluşturmak için kullanılan bir işaretleme dilidir.</div>
+
+    <div class="question" onclick="toggleAnswer(2)">2. CSS nedir?</div>
+    <div id="answer-2" class="answer">CSS, web sayfalarının stilini ve tasarımını düzenlemek için kullanılan bir dildir.</div>
+
+    <div class="question" onclick="toggleAnswer(3)">3. JavaScript nedir?</div>
+    <div id="answer-3" class="answer">JavaScript, web sayfalarına interaktif özellikler eklemek için kullanılan bir programlama dilidir.</div>
+  </div>
+
+  <script>
+    function toggleAnswer(id) {
+      const answer = document.getElementById(`answer-${id}`);
+      if (answer.style.display === "block") {
+        answer.style.display = "none";
+      } else {
+        answer.style.display = "block";
+      }
+    }
+  </script>
+
+
+    
+
+
+    
   </header>
   <p>How do I upload an image of a product?<br>
 To upload an image, simply click the [upload button] or drag and drop the image file. Make sure the product photo is clear and focused for better results.
