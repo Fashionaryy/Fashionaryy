@@ -216,4 +216,5 @@ footer {
   padding: 1em;
   background-color: var(--dark-green);
   color: var(--white);
+   position: fixed;
 }
