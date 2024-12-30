@@ -72,21 +72,25 @@ function getItemColor(imageElement) {
 // Classify the image using the AI model
 async function classifyImage(imageElement) {
   const tensor = tf.browser
-    .fromPixels(imageElement)
-    .resizeNearestNeighbor([224, 224])
+    .fromPixels(imageElement) // Convert image to tensor
+    .resizeBilinear([224, 224]) // Resize image to model input size
     .toFloat()
-    .expandDims();
+    .div(tf.scalar(255)) // Normalize to [0, 1]
+    .expandDims(); // Add batch dimension
 
-  const predictions = model.predict(tensor);
+  // Make predictions
+  const predictions = await model.predict(tensor).array();
+  console.log('Predictions:', predictions);
+
   const categories = ['coats', 'boots', 'pants', 'skirts', 'sweaters']; // Update with your categories
-  const categoryIndex = predictions.argMax(1).dataSync()[0];
-  return categories[categoryIndex];
+  const categoryIndex = predictions[0].indexOf(Math.max(...predictions[0])); // Get the index of the highest probability
+  return categories[categoryIndex]; // Return the category name
 }
 
 // Render matching products
 function renderMatchingProducts(products) {
   const productList = document.getElementById('productList');
-  productList.innerHTML = '';
+  productList.innerHTML = ''; // Clear the list
 
   if (products.length === 0) {
     const errorMessage = document.createElement('p');
