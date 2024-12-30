@@ -135,13 +135,13 @@ throw new Error('Model is not loaded.');
 }
         
         const predictions = await model.predict(input).data();
-      console.log("Tahminler:",predictions)
+      console.log(,predictions)
        
         const predictedClass = predictions.indexOf(Math.max(...predictions));
-        console.log("Tahmin Edilen Sınıf:", predictedClass);
+        console.log(", predictedClass);
         return predictedClass; 
     } catch (error) {
-        console.error("Görüntü sınıflandırma hatası:", error);
+        console.error(error);
         return null; 
     }
 }
@@ -151,13 +151,13 @@ async function processImage(imageElement) {
     await loadModelAndDataset(); 
     if(model){
     const dominantColor = getItemColor(imageElement);
-    console.log("Baskın Renk:", dominantColor);
+    console.log(dominantColor);
 
     const predictedClass = await classifyImage(imageElement);
     if (predictedClass !== null) {
-        console.log("Sınıflandırma Başarılı!");
+        console.log("Classification Successful!");
     } else {
-        console.log("Sınıflandırma Başarısız!");
+        console.log("Failed Classification!");
     }
 }
 }
@@ -206,7 +206,6 @@ function renderMatchingProducts(products) {
   });
 }
 
-// Resim yükleme ve işleme
 document.getElementById('classifyButton').addEventListener('click', async () => {
   const imageInput = document.getElementById('imageInput');
   const loadingSpinner = document.getElementById('loadingSpinner');
