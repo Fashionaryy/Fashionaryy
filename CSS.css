@@ -201,9 +201,8 @@ nav a:hover {
   color: var(--text-primary);
 }
 
-.names n{
+.names {
   text-align:center;
-  color: white;
 }
 
 /* Footer */
