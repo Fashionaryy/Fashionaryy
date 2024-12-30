@@ -2,7 +2,7 @@ async function setBackend() {
 
 try {
 
-await tf.setBackend('wasm'); // WebAssembly backend
+await tf.setBackend('wasm'); 
 
 console.log('WASM backend is enabled.');
 
@@ -12,7 +12,7 @@ console.warn('WASM backend failed. Trying WebGL...');
 
 try {
 
-await tf.setBackend('webgl'); // WebGL fallback
+await tf.setBackend('webgl'); 
 
 console.log('WebGL backend is enabled.');
 
@@ -20,7 +20,7 @@ console.log('WebGL backend is enabled.');
 
 console.warn('WebGL backend failed. Using CPU backend...');
 
-await tf.setBackend('cpu'); // CPU fallback
+await tf.setBackend('cpu'); 
 
 console.log('CPU backend is enabled.');
 
@@ -30,17 +30,17 @@ console.log('CPU backend is enabled.');
 
 }
 
-// Model ve dataset yolları
 
-const modelPath = './model_tfjs/model.json'; // TensorFlow.js model dosyası yolu
 
-const datasetPath = './dataset.json'; // Dataset JSON dosyası yolu
+const modelPath = './model_tfjs/model.json'; 
 
-let model; // Model yeri
+const datasetPath = './dataset.json'; 
 
-let dataset; // Dataset yeri
+let model; 
 
-// Model ve dataset yükleme
+let dataset; 
+
+
 
 async function loadModelAndDataset() {
 
@@ -54,7 +54,7 @@ throw new Error('TensorFlow.js library is not loaded correctly');
 
 console.log('Loading TensorFlow backend...');
 
-await setBackend(); // Backend ayarını bekle
+await setBackend(); 
 
 console.log('Loading model...');
 
@@ -82,7 +82,7 @@ alert('Failed to load the AI model or dataset. Please check the console for deta
 
 }
 
-// Görüntünün dominant rengini bulma
+
 
 function getItemColor(imageElement) {
 
@@ -90,9 +90,9 @@ const canvas = document.createElement('canvas');
 
 const ctx = canvas.getContext('2d');
 
-// Optimize edilmiş boyutlandırma
 
-const scale = 100; // Sabit boyut
+
+const scale = 100; 
 
 canvas.width = Math.min(imageElement.width, scale);
 
@@ -122,7 +122,7 @@ return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
 
 }
 
-// Görüntüyü sınıflandırma
+/
 
 async function classifyImage(imageElement) {
 
@@ -133,22 +133,22 @@ throw new Error('Model is not loaded.');
 
 
 }
-        // Tahmin yap
+        
         const predictions = await model.predict(input).data();
       console.log("Tahminler:",predictions)
-        // Tahminleri işle (örneğin, en yüksek olasılıklı sınıfı bul)
+       
         const predictedClass = predictions.indexOf(Math.max(...predictions));
         console.log("Tahmin Edilen Sınıf:", predictedClass);
-        return predictedClass; // veya diğer tahmin sonuçları
+        return predictedClass; 
     } catch (error) {
         console.error("Görüntü sınıflandırma hatası:", error);
-        return null; // veya bir hata değeri
+        return null; 
     }
 }
 
-// Örnek kullanım (bir resim yüklendikten sonra)
+
 async function processImage(imageElement) {
-    await loadModelAndDataset(); // Model ve dataset yüklenmesini bekle
+    await loadModelAndDataset(); 
     if(model){
     const dominantColor = getItemColor(imageElement);
     console.log("Baskın Renk:", dominantColor);
@@ -161,29 +161,28 @@ async function processImage(imageElement) {
     }
 }
 }
-//sayfa yüklendiğinde model ve dataset yükleme
+
 window.addEventListener('load', (event) => {
     loadModelAndDataset();
 });
 
   const tensor = tf.browser
-    .fromPixels(imageElement) // Görüntüyü tensora çevir
-    .resizeBilinear([224, 224]) // Girdi boyutunu modele göre ayarla
+    .fromPixels(imageElement) 
+    .resizeBilinear([224, 224]) 
     .toFloat()
-    .div(tf.scalar(255)) // Normalize et
-    .expandDims(); // Batch boyutunu ekle
+    .div(tf.scalar(255)) 
+    .expandDims(); 
 
-  console.log('Input Tensor:', tensor.shape); // Tensor detaylarını kontrol edin
-
+  console.log('Input Tensor:', tensor.shape); 
   const predictions = await model.predict(tensor).array();
   console.log('Predictions:', predictions);
 
-  const categories = dataset.categories || ['coats', 'boots', 'pants', 'skirts', 'sweaters']; // Dataset'teki kategoriler
-  const categoryIndex = predictions[0].indexOf(Math.max(...predictions[0])); // En yüksek ihtimalli sınıf
-  return categories[categoryIndex]; // Sınıf adını döndür
+  const categories = dataset.categories || ['coats', 'boots', 'pants', 'skirts', 'sweaters']; 
+  const categoryIndex = predictions[0].indexOf(Math.max(...predictions[0])); lli sınıf
+  return categories[categoryIndex]; 
 }
 
-// Eşleşen ürünleri gösterme
+
 function renderMatchingProducts(products) {
   const productList = document.getElementById('productList');
   if (!productList) {
@@ -191,7 +190,7 @@ function renderMatchingProducts(products) {
     return;
   }
 
-  productList.innerHTML = ''; // Listeyi temizle
+  productList.innerHTML = ''; 
 
   if (products.length === 0) {
     const errorMessage = document.createElement('p');
@@ -217,7 +216,7 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
     return;
   }
 
-  loadingSpinner.style.display = 'block'; // Yükleme animasyonunu başlat
+  loadingSpinner.style.display = 'block'; 
 
   try {
     const imageFile = imageInput.files[0];
@@ -235,12 +234,12 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
         console.error('Error during classification:', error);
         alert('Image classification failed.');
       } finally {
-        loadingSpinner.style.display = 'none'; // Yükleme animasyonunu durdur
+        loadingSpinner.style.display = 'none'; 
       }
     };
   } catch (error) {
     console.error('Error processing image:', error);
     alert('An error occurred while processing the image.');
-    loadingSpinner.style.display = 'none'; // Yükleme animasyonunu durdur
+    loadingSpinner.style.display = 'none'; 
   }
 });
