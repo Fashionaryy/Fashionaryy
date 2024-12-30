@@ -1,49 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fashinary - Fashion Inspiration</title>
-  <link rel="stylesheet" href="CSS.css">
-  <!-- TensorFlow.js and TFLite Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite"></script>
-  <!-- Favicon -->
-  <link rel="icon" href="images/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashinary - Fashion Inspiration</title>
+    <link rel="stylesheet" href="CSS.css">
+    <!-- TensorFlow.js and TFLite Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico">
+  <style>
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Color Palette */
+:root {
+    --dark-green: #657552;
+    --soft-yellow: #e7d78a;
+    --text-primary: #333;
+    --white: #fafafa;
+    --button-hover: #333333aa;
+}
+
+/* Body Styling */
+body {
+    background-color: var(--white);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 2em;
+    background-color: var(--soft-yellow);
+}
+
+header .logo img {
+    width: 200px;
+    height: auto;
+}
+
+nav {
+    display: flex;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+nav a:hover {
+    color: var(--dark-green);
+    text-decoration: underline;
+}
+
+/* Main Content */
+main {
+    padding: 2em;
+    background-color: var(--white);
+}
+
+.intro {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.intro h1 {
+    font-size: 2.5em;
+    color: var(--dark-green);
+    margin-bottom: 1em;
+}
+
+.intro p {
+    font-size: 1.2em;
+    margin-bottom: 1.5em;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: var(--dark-green);
+    color: var(--white);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    font-size: 1em;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        margin: 10px 0;
+    }
+}
+
+
+    
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="images/logo.png" alt="Fashinary Logo">
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="featured.html">Featured</a>
-      <a href="inspiration.html">Inspiration</a>
-      <a href="help.html">Help</a>
-      <a href="Contact.html">Contact</a>
-    </nav>
-  </header>
-  
-<div>
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="Fashinary Logo">
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="featured.html">Featured</a>
+            <a href="inspiration.html">Inspiration</a>
+            <a href="help.html">Help</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
 
-<p> At Fashionary <br> we are guided by a powerful vision  to make fashion discovery effortless, accessible and transformative. Inspired by the challenges we faced as a team, we sought to create a solution that would simplify the shopping experience and make it more enjoyable. By harnessing the power of artificial intelligence, we developed a platform that not only streamlines the product discovery process, but also redefines how users interact with fashion.
+    <main>
+        <section class="intro">
+            <h1>Welcome to Fashionary</h1>
+            <p>
+                At Fashionary, we are guided by a powerful vision to make fashion discovery effortless, accessible, and transformative. Inspired by the challenges we faced as a team, we sought to create a solution that would simplify the shopping experience and make it more enjoyable. By harnessing the power of artificial intelligence, we developed a platform that not only streamlines the product discovery process, but also redefines how users interact with fashion.
+            </p>
+            <p>
+                Our mission is to make it easier for users to access instant and accurate information about products and brands through visual search technology. We aim to simplify discovery and decision-making, enabling users to easily find clothes from around the world. At Fashionary, we are committed to fostering creativity, independence, and informed choices, making the visual world of fashion more accessible and transformative for individuals of all backgrounds. In this way, we strive to empower our users to confidently explore and embrace their unique style.
+            </p>
+        </section>
+    </main>
 
-  <br>
-Our mission is to make it easier for users to access instant and accurate information about products and brands through visual search technology. We aim to simplify discovery and decision-making, enabling users to easily find clothes from around the world. At Fashionary, we are committed to fostering creativity, independence and informed choices, making the visual world of fashion more accessible and transformative for individuals of all backgrounds. In this way, we strive to empower our users to confidently explore and embrace their unique style.</p>
-</div>
+    <footer>
+        <p>&copy; 2024 Fashionary. All rights reserved.</p>
+    </footer>
 
-
-
-
-
-
-  
-  <footer>
-    <p>© 2024 Fashionary</p>
-  </footer>
-
-  <!-- Include JavaScript -->
-  <script src="app.js"></script>
+    <!-- Include JavaScript -->
+    <script src="app.js"></script>
 </body>
 </html>
