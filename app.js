@@ -25,11 +25,11 @@ async function loadModelAndDataset() {
         await setBackend();
 
         console.log('Loading model...');
-        model = await tf.loadLayersModel('./model_tfjs/model.json'); // modelPath sabit olarak eklendi
+        model = await tf.loadLayersModel('./model_tfjs/model.json'); 
         console.log('Model loaded successfully!');
 
         console.log('Loading dataset...');
-        const response = await fetch('./dataset.json'); // datasetPath sabit olarak eklendi
+        const response = await fetch('./dataset.json'); 
         if (!response.ok) {
             throw new Error(`Failed to fetch dataset: ${response.statusText}`);
         }
@@ -69,6 +69,8 @@ async function classifyImage(imageElement) {
         throw new Error('Model is not loaded.');
     }
 
+
+    
     try {
         const tensor = tf.browser.fromPixels(imageElement)
             .resizeBilinear([224, 224])
@@ -112,8 +114,8 @@ function renderMatchingProducts(products) {
     });
 }
 
-let model; // model değişkenini global scope'a taşıdık
-let dataset; // dataset değişkenini global scope'a taşıdık
+let model; 
+let dataset; 
 
 window.addEventListener('load', () => {
     loadModelAndDataset();
@@ -141,13 +143,15 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
                 const color = getItemColor(imageElement);
                 console.log('Category:', category);
                 console.log('Color:', color);
-                renderMatchingProducts([{ name: 'Sample Product', category, color }]); // Örnek ürün verisi
+                renderMatchingProducts([{ name: 'Sample Product', category, color }]); 
             } catch (error) {
                 console.error('Error during classification:', error);
                 alert('Image classification failed.');
             } finally {
                 loadingSpinner.style.display = 'none';
             }
+
+            
         };
     } catch (error) {
         console.error('Error processing image:', error);
