@@ -25,22 +25,20 @@ const datasetPath = './dataset.json'; // Path to your dataset JSON
 
 let model; // Variable to hold the loaded model
 let dataset; // Variable to hold the dataset
-let similarityThreshold = 50; // Default similarity threshold for color matching
 
+// Load the model and dataset
 async function loadModelAndDataset() {
   try {
-    // Check if TensorFlow.js is loaded
     if (typeof tf === 'undefined') {
       throw new Error('TensorFlow.js library is not loaded correctly');
     }
 
     console.log('Loading model...');
-    // Load the model (TensorFlow.js format)
-    model = await tf.loadLayersModel(modelPath); // Use TensorFlow.js's loadLayersModel for H5 models
+    model = await tf.loadLayersModel(modelPath);
     console.log('Model loaded successfully!');
 
     console.log('Loading dataset...');
-    const response = await fetch(datasetPath); // Load dataset JSON
+    const response = await fetch(datasetPath);
     dataset = await response.json();
     console.log('Dataset loaded successfully!');
   } catch (error) {
@@ -49,29 +47,22 @@ async function loadModelAndDataset() {
   }
 }
 
-// Get dominant color of the image (using canvas)
+// Get dominant color of the image
 function getItemColor(imageElement) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
-
-  // Resize canvas to match image dimensions
   canvas.width = imageElement.width;
   canvas.height = imageElement.height;
-
-  // Draw the image on the canvas
   ctx.drawImage(imageElement, 0, 0);
 
-  // Get image data
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const pixels = imageData.data;
-
   let r = 0, g = 0, b = 0, count = 0;
 
-  // Calculate average RGB values
   for (let i = 0; i < pixels.length; i += 4) {
-    r += pixels[i];     // Red
-    g += pixels[i + 1]; // Green
-    b += pixels[i + 2]; // Blue
+    r += pixels[i];
+    g += pixels[i + 1];
+    b += pixels[i + 2];
     count++;
   }
 
@@ -82,19 +73,20 @@ function getItemColor(imageElement) {
 async function classifyImage(imageElement) {
   const tensor = tf.browser
     .fromPixels(imageElement)
-    .resizeNearestNeighbor([224, 224]) // Resize image for the model
+    .resizeNearestNeighbor([224, 224])
     .toFloat()
     .expandDims();
-  const predictions = await model.predict(tensor); // Get predictions from the model
-  const categories = ['coats', 'boots', 'pants', 'skirts', 'sweaters']; // Example categories
-  const categoryIndex = predictions.argMax(1).dataSync()[0]; // Get category index
+
+  const predictions = model.predict(tensor);
+  const categories = ['coats', 'boots', 'pants', 'skirts', 'sweaters']; // Update with your categories
+  const categoryIndex = predictions.argMax(1).dataSync()[0];
   return categories[categoryIndex];
 }
 
 // Render matching products
 function renderMatchingProducts(products) {
   const productList = document.getElementById('productList');
-  productList.innerHTML = ''; // Clear previous results
+  productList.innerHTML = '';
 
   if (products.length === 0) {
     const errorMessage = document.createElement('p');
@@ -120,7 +112,6 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
     return;
   }
 
-  // Show loading spinner
   loadingSpinner.style.display = 'block';
 
   const imageFile = imageInput.files[0];
@@ -132,8 +123,6 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
     console.log('Category:', category);
     console.log('Color:', color);
     renderMatchingProducts([{ name: 'Sample Product', category, color }]);
-
-    // Hide loading spinner
     loadingSpinner.style.display = 'none';
   };
 });
