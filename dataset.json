@@ -6,12 +6,12 @@
     "file": "matched_items/Black Coat 2.png", 
     "link": "https://www.bershka.com/tr/c0p174997388.html?colorId=800"
   },
-
-    "name",":", "Black Coat 3", 
-    "category",":", "coats", 
-    "color",":", [1, 1, 1], 
-    "file",":", "matched_items/Black Coat 3.png", 
-    "link",":https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800",
+{
+    "name": "Black Coat 3", 
+    "category": "coats", 
+    "color": [1, 1, 1], 
+    "file": "matched_items/Black Coat 3.png", 
+    "link": ":https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800"},
   { 
     "name": "Black Coat", 
     "category": "coats", 
