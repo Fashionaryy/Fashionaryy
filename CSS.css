@@ -212,9 +212,13 @@ nav a {
 
 /* Footer */
 footer {
-  text-align: center;
+ text-align: center;
   padding: 1em;
   background-color: var(--dark-green);
   color: var(--white);
-   position: fixed;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%); /* This centers the footer horizontally */
+  width: 100%;
 }
