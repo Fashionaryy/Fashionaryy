@@ -31,14 +31,15 @@ async function loadModelAndDataset() {
 
         console.log('Loading dataset...');
         const response = await fetch(datasetPath);
-        if (!response.ok) throw new Error(Failed to fetch dataset: ${response.status} ${response.statusText});
-        dataset = await response.json();
-        console.log('Dataset loaded successfully!');
-    } catch (error) {
-        console.error('Error loading model or dataset:', error);
-        alert('Failed to load the AI model or dataset. Please check the console for details.');
-    }
+        try {
+    if (!response.ok) throw new Error(`Failed to fetch dataset: ${response.status} ${response.statusText}`);
+    dataset = await response.json();
+    console.log('Dataset loaded successfully!');
+} catch (error) {
+    console.error('Error loading model or dataset:', error);
+    alert('Failed to load the AI model or dataset. Please check the console for details.');
 }
+
 
 // Get dominant color of the image
 function getItemColor(imageElement) {
