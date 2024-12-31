@@ -106,7 +106,7 @@ function renderMatchingProducts(products) {
 
     products.forEach(product => {
         const li = document.createElement('li');
-        li.textContent = ${product.name} - ${product.category} (${product.color.join(', ')});
+      li.textContent = `${product.name} - ${product.category} (${product.color.join(', ')})`;
         productList.appendChild(li);
     });
 }
