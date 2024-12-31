@@ -31,15 +31,14 @@ async function loadModelAndDataset() {
 
         console.log('Loading dataset...');
         const response = await fetch(datasetPath);
-        try {
-    if (!response.ok) throw new Error(`Failed to fetch dataset: ${response.status} ${response.statusText}`);
-    dataset = await response.json();
-    console.log('Dataset loaded successfully!');
-} catch (error) {
-    console.error('Error loading model or dataset:', error);
-    alert('Failed to load the AI model or dataset. Please check the console for details.');
+        if (!response.ok) throw new Error(`Failed to fetch dataset: ${response.status} ${response.statusText}`);
+        dataset = await response.json();
+        console.log('Dataset loaded successfully!');
+    } catch (error) {
+        console.error('Error loading model or dataset:', error);
+        alert('Failed to load the AI model or dataset. Please check the console for details.');
+    }
 }
-
 
 // Get dominant color of the image
 function getItemColor(imageElement) {
@@ -106,7 +105,7 @@ function renderMatchingProducts(products) {
 
     products.forEach(product => {
         const li = document.createElement('li');
-      li.textContent = `${product.name} - ${product.category} (${product.color.join(', ')})`;
+        li.textContent = `${product.name} - ${product.category} (${product.color.join(', ')})`;
         productList.appendChild(li);
     });
 }
@@ -153,4 +152,3 @@ document.getElementById('classifyButton').addEventListener('click', async () => 
         loadingSpinner.style.display = 'none';
     }
 });
-
