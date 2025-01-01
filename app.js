@@ -20,9 +20,9 @@
 {
     "name": "Black Coat 3", 
     "category": "coats", 
-    "color": [[1, 1, 1], [15, 15, 15],[49, 44, 42],[36, 33, 30],[91, 88, 87]]
+    "color": [[1, 1, 1], [15, 15, 15],[49, 44, 42],[36, 33, 30],[91, 88, 87]],
     "file": "matched_items/Black Coat 3.png", 
-    "link": ":https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800"},
+    "link": "https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800"},
   { 
     "name": "Black Coat", 
     "category": "coats", 
