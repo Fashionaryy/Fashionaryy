@@ -467,3 +467,4 @@ function showResultsWithGrouping(img, dataset, category, resultSection, productL
 
   resultSection.style.display = 'block';
 }
+  });
