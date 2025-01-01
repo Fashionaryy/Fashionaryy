@@ -113,13 +113,13 @@
     "category": "coats", 
     "color":[[116, 64, 26], [183, 125, 79],[75, 36, 9],[188, 129, 81],[99, 54, 20]]
     "file": "matched_items/Brown Coat 2.png", 
-    "link": "https://www.bershka.com/tr/c0p164324663.html?colorId=700","":
+    "link": "https://www.bershka.com/tr/c0p164324663.html?colorId=700"
      { 
     "name": "Brown Coat ", 
     "category": "coats", 
     "color": [[35, 23, 18], [72, 49, 29],[45, 29, 22],[70, 42, 29],[75, 54, 37]]
     "file": "matched_items/Brown Coat.png", 
-    "link": "https://www.bershka.com/tr/c0p164734203.html?colorId=700","":
+    "link": "https://www.bershka.com/tr/c0p164734203.html?colorId=700"
         { 
     "name": "Brown Line Boots", 
     "category": "Boots", 
@@ -131,7 +131,7 @@
     "category": "coats", 
     "color": [[74, 54, 31], [75, 58, 38],[82, 59, 39],[64, 47, 27],[95, 77, 53]]
     "file": "matched_items/Brown Long Coat.png", 
-    "link": "https://www.bershka.com/tr/c0p165251114.html?colorId=746","":  
+    "link": "https://www.bershka.com/tr/c0p165251114.html?colorId=746"
      { 
     "name": "Brown Long Skirt ", 
     "category": "Skirts", 
@@ -462,7 +462,7 @@
     const message = consolidatedColors.length === 1
       ? "We've consolidated similar colors into one option."
       : "Here are multiple distinct color options to choose from.";
-    alert(message);
+    innerHTML(message);
 
     consolidatedColors.forEach((rgb) => {
       const colorName = mapColorToBasicName(rgb);
