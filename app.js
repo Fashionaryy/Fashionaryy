@@ -64,7 +64,7 @@
    { 
     "name": "Black Skirt", 
     "category": "Skirts", 
-    "color": [[1, 1, 1], [31, 30 44],[25, 25, 37],[26, 27, 39],[39, 38, 57]],
+    "color": [[1, 1, 1], [31, 30, 44],[25, 25, 37],[26, 27, 39],[39, 38, 57]],
     "file": "matched_items/Black Skirt.png", 
     "link": "https://www.defacto.com.tr/pilise-normal-bel-mini-etek-3156159"},
      { 
