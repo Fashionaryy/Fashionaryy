@@ -18,7 +18,7 @@
       "link": "https://www.bershka.com/tr/c0p174997388.html?colorId=800"
     },
     {
-    ""name": "Black Coat 3",
+    "name": "Black Coat 3",
       "category": "coats",
       "color": [[1, 1, 1], [15, 15, 15], [49, 44, 42], [36, 33, 30], [91, 88, 87]],
       "file": "matched_items/Black Coat 3.png",
