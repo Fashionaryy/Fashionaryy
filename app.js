@@ -9,34 +9,35 @@
   const colorButtons = document.getElementById('colorButtons');
   const productList = document.getElementById('productList');
 
-  const dataset = [
-    { 
-    "name": "Black Coat 2", 
-    "category": "coats", 
-    "color": [[1, 1, 1], [15, 15, 15], [49, 44, 42], [36, 33, 30], [91, 88, 87]],
-    "file": "matched_items/Black Coat 2.png", 
-    "link": "https://www.bershka.com/tr/c0p174997388.html?colorId=800"
-  },
-{
-    "name": "Black Coat 3", 
-    "category": "coats", 
-    "color": [[1, 1, 1], [15, 15, 15],[49, 44, 42],[36, 33, 30],[91, 88, 87]],
-    "file": "matched_items/Black Coat 3.png", 
-    "link": "https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800"},
-  { 
-    "name": "Black Coat", 
-    "category": "coats", 
-    "color": [[1, 1, 1], [15, 15, 15],[49, 44, 42],[36, 33, 30],[91, 88, 87]],
-    "file": "matched_items/Black Coat.png", 
-    "link":
-    "https://www.bershka.com/tr/c0p164324918.html?colorId=800"},
-  { 
-    "name": "Black Male Boots", 
-    "category": "Boots", 
-    "color": [[1, 1, 1], [22, 22, 22],[52, 52, 52],[14, 14, 14],[43, 43, 43]],
-    "file": "matched_items/Black Male Boots.png", 
-    "link": "https://shop.mango.com/tr/tr/p/erkek/ayakkab%C4%B1/cizmeler-ve-botlar/bagc%C4%B1kl%C4%B1-deri-bot_77015981?c=99&utm_source=product-share&utm_medium=social"},
-  { 
+   const dataset = [
+    {
+      "name": "Black Coat 2",
+      "category": "coats",
+      "color": [[1, 1, 1], [15, 15, 15], [49, 44, 42], [36, 33, 30], [91, 88, 87]],
+      "file": "matched_items/Black Coat 2.png",
+      "link": "https://www.bershka.com/tr/c0p174997388.html?colorId=800"
+    },
+    {
+    ""name": "Black Coat 3",
+      "category": "coats",
+      "color": [[1, 1, 1], [15, 15, 15], [49, 44, 42], [36, 33, 30], [91, 88, 87]],
+      "file": "matched_items/Black Coat 3.png",
+      "link": "https://www.bershka.com/tr/soluk-efektli-suni-deri-ceket-c0p162282059.html?colorId=800"
+    },
+    {
+      "name": "Black Coat",
+      "category": "coats",
+      "color": [[1, 1, 1], [15, 15, 15], [49, 44, 42], [36, 33, 30], [91, 88, 87]],
+      "file": "matched_items/Black Coat.png",
+      "link": "https://www.bershka.com/tr/c0p164324918.html?colorId=800"
+    },
+    {
+      "name": "Black Male Boots",
+      "category": "Boots",
+      "color": [[1, 1, 1], [22, 22, 22], [52, 52, 52], [14, 14, 14], [43, 43, 43]],
+      "file": "matched_items/Black Male Boots.png",
+      "link": "https://shop.mango.com/tr/tr/p/erkek/ayakkab%C4%B1/cizmeler-ve-botlar/bagc%C4%B1kl%C4%B1-deri-bot_77015981?c=99"
+    },
     "name": "Black Pants 2", 
     "category": "Pants", 
     "color": [[1, 1, 1],[36, 44, 52],[36, 43, 50],[34, 39, 44],[34, 41, 49] ],
