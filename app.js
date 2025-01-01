@@ -115,31 +115,31 @@
     "category": "coats", 
     "color":[[116, 64, 26], [183, 125, 79],[75, 36, 9],[188, 129, 81],[99, 54, 20]],
     "file": "matched_items/Brown Coat 2.png", 
-    "link": "https://www.bershka.com/tr/c0p164324663.html?colorId=700"
+    "link": "https://www.bershka.com/tr/c0p164324663.html?colorId=700"},
      { 
     "name": "Brown Coat ", 
     "category": "coats", 
     "color": [[35, 23, 18], [72, 49, 29],[45, 29, 22],[70, 42, 29],[75, 54, 37]],
     "file": "matched_items/Brown Coat.png", 
-    "link": "https://www.bershka.com/tr/c0p164734203.html?colorId=700"
+    "link": "https://www.bershka.com/tr/c0p164734203.html?colorId=700"},
         { 
     "name": "Brown Line Boots", 
     "category": "Boots", 
     "color": [[92, 71, 54], [90, 68, 52],[83, 65, 50],[66, 49, 35],[29, 17, 7]],
     "file": "matched_items/Brown Line Boots.png", 
-    "link": "https://shop.mango.com/tr/tr/p/kadin/ayakkab%C4%B1/cizme-ve-bot/puskullu-topuklu-deri-bilekte-bot_87030257?c=37&utm_source=product-share&utm_medium=social"}}},
+    "link": "https://shop.mango.com/tr/tr/p/kadin/ayakkab%C4%B1/cizme-ve-bot/puskullu-topuklu-deri-bilekte-bot_87030257?c=37&utm_source=product-share&utm_medium=social"},
       { 
     "name": "Brown Long Coat ", 
     "category": "coats", 
     "color": [[74, 54, 31], [75, 58, 38],[82, 59, 39],[64, 47, 27],[95, 77, 53]],
     "file": "matched_items/Brown Long Coat.png", 
-    "link": "https://www.bershka.com/tr/c0p165251114.html?colorId=746"
+    "link": "https://www.bershka.com/tr/c0p165251114.html?colorId=746"},
      { 
     "name": "Brown Long Skirt ", 
     "category": "Skirts", 
     "color": [[80, 55, 42], [60, 43, 48],[53, 41, 34],[34, 36, 39]],
     "file": "matched_items/Brown Long Skirt.png", 
-    "link": "https://www.defacto.com.tr/straight-fit-etek-3175633"}},
+    "link": "https://www.defacto.com.tr/straight-fit-etek-3175633"},
   { 
     "name": "Brown Male Boots", 
     "category": "Boots", 
@@ -218,15 +218,13 @@
     "category": "coats", 
     "color": [[160, 158, 159], [160, 159, 160],[104, 102, 101],[144, 144, 144],[156, 154, 154]],
     "file": "matched_items/Grey Coat.png", 
-    "link":
-    "https://www.bershka.com/tr/c0p164328764.html?colorId=200"},
+    "link":"https://www.bershka.com/tr/c0p164328764.html?colorId=200"},
    { 
     "name": "Grey Long Skirt", 
     "category": "Skirt", 
     "color": [[84, 82, 95], [68, 66, 79],[78, 76, 89],[92, 89, 104],[78, 76, 88]],
     "file": "matched_items/Grey Long Skirt.png", 
-    "link":
-    "https://www.defacto.com.tr/a-kesim-normal-bel-maxi-etek-3194726"},
+    "link":"https://www.defacto.com.tr/a-kesim-normal-bel-maxi-etek-3194726"},
    { 
     "name": "Grey Skirt 2", 
     "category": "Skirt", 
@@ -239,9 +237,8 @@
     "category": "Skirt", 
     "color": [[90, 89, 94],[94, 92, 96],[85, 84, 89],[76, 76, 80],[96, 96, 98] ],
     "file": "matched_items/Grey Skirt.png", 
-    "link":
-    "https://www.defacto.com.tr/coool-pilise-etek-3172317"},
-       { 
+    "link":"https://www.defacto.com.tr/coool-pilise-etek-3172317"},
+   { 
     "name": "Grey Sweater", 
     "category": "Sweaters", 
     "color": [[146, 152, 152], [182, 186, 186],[178, 183, 185],[86, 88, 85],[148, 155, 154]],
@@ -264,8 +261,7 @@
     "category": "coats", 
     "color": [[44, 6, 17], [38, 10, 16],[39, 6 ,13],[49, 7, 17],[50, 12, 21]],
     "file": "matched_items/Red Coat.png", 
-    "link":
-    "https://www.bershka.com/tr/c0p167582954.html?colorId=605"},
+    "link": "https://www.bershka.com/tr/c0p167582954.html?colorId=605"},
        { 
     "name": "Red Skirt", 
     "category": "Skirts", 
@@ -331,7 +327,7 @@
     "category": "Sweaters", 
     "color": [[237, 234, 227],[241,238,226],[206, 203, 190],[225, 223, 203],[238, 235, 220] ],
     "file": "matched_items/White Sweater 2.png", 
-    "link": "Ekru Kadın Dik Yaka Kazak Uzun Kollu Saç Örgü Desenli 5WAK90087HT | Koton"}
+    "link": "Ekru Kadın Dik Yaka Kazak Uzun Kollu Saç Örgü Desenli 5WAK90087HT | Koton"},
   ];
 
   const categories = ["coats", "sweaters", "boots", "pants", "skirts"];
