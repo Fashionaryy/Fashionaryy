@@ -485,17 +485,16 @@
     productList.innerHTML = '';
 
     const range = 50;
-
     const matches = dataset.filter(item => {
       if (!selectedColor) return item.category === selectedCategory;
 
-      const itemColors = item.colors || [];
+      const itemColors = Array.isArray(item.color) ? item.color : [];
       return item.category === selectedCategory &&
-        itemColors.some(color => (
+        itemColors.some(color =>
           Math.abs(color[0] - selectedColor[0]) <= range &&
           Math.abs(color[1] - selectedColor[1]) <= range &&
           Math.abs(color[2] - selectedColor[2]) <= range
-        ));
+        );
     });
 
     if (matches.length === 0) {
