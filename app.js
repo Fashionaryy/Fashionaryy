@@ -360,154 +360,110 @@
     reader.readAsDataURL(file);
   });
 
-  function extractDominantColors(img, numColors) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+  function analyzeAndGroupColors(img, numColors = 6, range = 100) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
-    const regionWidth = img.width * 0.5;
-    const regionHeight = img.height * 0.5;
-    const startX = (img.width - regionWidth) / 2;
-    const startY = (img.height - regionHeight) / 2;
+  // Center region of the image for analysis
+  const regionWidth = img.width * 0.5;
+  const regionHeight = img.height * 0.5;
+  const startX = (img.width - regionWidth) / 2;
+  const startY = (img.height - regionHeight) / 2;
 
-    canvas.width = regionWidth;
-    canvas.height = regionHeight;
-    ctx.drawImage(img, startX, startY, regionWidth, regionHeight, 0, 0, regionWidth, regionHeight);
+  canvas.width = regionWidth;
+  canvas.height = regionHeight;
+  ctx.drawImage(img, startX, startY, regionWidth, regionHeight, 0, 0, regionWidth, regionHeight);
 
-    const imageData = ctx.getImageData(0, 0, regionWidth, regionHeight);
-    const pixels = imageData.data;
+  const imageData = ctx.getImageData(0, 0, regionWidth, regionHeight);
+  const pixels = imageData.data;
 
-    return calculateDominantColors(pixels, numColors);
-  }
+  // Analyze and group colors
+  const groupedColors = groupColorsByRange(pixels, range);
 
-  function calculateDominantColors(pixels, numColors) {
-    const colorCounts = {};
-    const dominantColors = [];
+  // Sort groups by most occurrences
+  const sortedGroups = Object.entries(groupedColors)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, numColors);
 
-    for (let i = 0; i < pixels.length; i += 4) {
-      const r = Math.round(pixels[i] / 10) * 10;
-      const g = Math.round(pixels[i + 1] / 10) * 10;
-      const b = Math.round(pixels[i + 2] / 10) * 10;
+  // Extract top groups
+  const topColors = sortedGroups.map(([rgb, data]) => ({
+    color: rgb.split(',').map(Number),
+    count: data.count,
+  }));
 
-      const rgb = `${r},${g},${b}`;
-      colorCounts[rgb] = (colorCounts[rgb] || 0) + 1;
-    }
+  return topColors;
+}
 
-    const sortedColors = Object.entries(colorCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, numColors);
+function groupColorsByRange(pixels, range) {
+  const groupedColors = {};
 
-    sortedColors.forEach(([rgb]) => {
-      const [r, g, b] = rgb.split(',').map(Number);
-      dominantColors.push([r, g, b]);
-    });
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
 
-    return dominantColors;
-  }
-
-  function consolidateColors(colors, range) {
-    const consolidated = [];
-
-    colors.forEach((color) => {
-      const isSimilar = consolidated.some((existingColor) =>
-        Math.abs(color[0] - existingColor[0]) <= range &&
-        Math.abs(color[1] - existingColor[1]) <= range &&
-        Math.abs(color[2] - existingColor[2]) <= range
+    // Find a group or create a new one
+    const existingGroup = Object.keys(groupedColors).find((key) => {
+      const [groupR, groupG, groupB] = key.split(',').map(Number);
+      return (
+        Math.abs(r - groupR) <= range &&
+        Math.abs(g - groupG) <= range &&
+        Math.abs(b - groupB) <= range
       );
-
-      if (!isSimilar) {
-        consolidated.push(color);
-      }
     });
 
-    return consolidated;
-  }
-
-  function mapColorToBasicName(rgb) {
-    const [r, g, b] = rgb;
-    if (r > 200 && g > 200 && b > 200) return "White";
-    if (r > 200 && g < 100 && b < 100) return "Red";
-    if (r < 100 && g > 200 && b < 100) return "Green";
-    if (r < 100 && g < 100 && b > 200) return "Blue";
-    if (r > 150 && g > 100 && b < 50) return "Brown";
-    if (r > 150 && g < 100 && b > 150) return "Pink";
-    if (r < 50 && g < 50 && b < 50) return "Black";
-    if (r > 100 && g > 100 && b > 100) return "Grey";
-    return "Other";
-  }
-
-  function showCategories() {
-    categoryButtons.innerHTML = '';
-    categories.forEach(category => {
-      const button = document.createElement('button');
-      button.textContent = category;
-      button.className = 'category-button';
-      button.addEventListener('click', () => {
-        selectedCategory = category;
-        colorSection.style.display = 'block';
-        categorySection.style.display = 'none';
-      });
-      categoryButtons.appendChild(button);
-    });
-    categorySection.style.display = 'block';
-  }
-
-  function setupColorButtons(colors) {
-    colorButtons.innerHTML = '';
-
-    const range = 50;
-    const consolidatedColors = consolidateColors(colors, range);
-
-    const message = consolidatedColors.length === 1
-      ? "We've consolidated similar colors into one option."
-      : "Here are multiple distinct color options to choose from.";
-    alert(message);
-
-    consolidatedColors.forEach((rgb) => {
-      const colorName = mapColorToBasicName(rgb);
-      const [r, g, b] = rgb;
-      const button = document.createElement('button');
-      button.textContent = colorName;
-      button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-      button.style.border = '2px solid black';
-      button.className = 'color-button';
-      button.addEventListener('click', () => {
-        selectedColor = colorName === "Other" ? null : rgb;
-        colorSection.style.display = 'none';
-        showResults();
-      });
-      colorButtons.appendChild(button);
-    });
-  }
-
-  function showResults() {
-    productList.innerHTML = '';
-
-    const range = 50;
-    const matches = dataset.filter(item => {
-      if (!selectedColor) return item.category === selectedCategory;
-
-      const itemColors = Array.isArray(item.color) ? item.color : [];
-      return item.category === selectedCategory &&
-        itemColors.some(color =>
-          Math.abs(color[0] - selectedColor[0]) <= range &&
-          Math.abs(color[1] - selectedColor[1]) <= range &&
-          Math.abs(color[2] - selectedColor[2]) <= range
-        );
-    });
-
-    if (matches.length === 0) {
-      productList.innerHTML = '<li>No matches found. Please try again with a better picture or look through the help section.</li>';
+    if (existingGroup) {
+      groupedColors[existingGroup].count += 1;
     } else {
-      matches.forEach(match => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-          <img src="${match.file}" alt="${match.name}" class="result-thumbnail">
-          <p>${match.name}</p>
-          <a href="${match.link}" target="_blank">View Product</a>
-        `;
-        productList.appendChild(listItem);
-      });
+      const rgbKey = `${r},${g},${b}`;
+      groupedColors[rgbKey] = { count: 1 };
     }
-    resultSection.style.display = 'block';
   }
-});
+
+  return groupedColors;
+}
+
+function filterDatasetByColorGroup(dataset, category, selectedColor, range = 100) {
+  return dataset.filter((item) => {
+    if (item.category !== category) return false;
+
+    const matchesColor = item.colors.some((color) =>
+      Math.abs(color[0] - selectedColor[0]) <= range &&
+      Math.abs(color[1] - selectedColor[1]) <= range &&
+      Math.abs(color[2] - selectedColor[2]) <= range
+    );
+
+    return matchesColor;
+  });
+}
+
+function showResultsWithGrouping(img, dataset, category, resultSection, productList) {
+  const topColors = analyzeAndGroupColors(img);
+
+  if (!topColors.length) {
+    productList.innerHTML = '<li>No dominant colors found in the image.</li>';
+    resultSection.style.display = 'block';
+    return;
+  }
+
+  // Let user select one of the top color groups
+  const userSelectedColor = topColors[0].color; // For now, automatically select the most dominant group
+
+  const matches = filterDatasetByColorGroup(dataset, category, userSelectedColor);
+
+  if (matches.length === 0) {
+    productList.innerHTML = '<li>No matches found. Please try another image or select "Other".</li>';
+  } else {
+    matches.forEach((match) => {
+      const listItem = document.createElement('li');
+      listItem.innerHTML = `
+        <img src="${match.file}" alt="${match.name}" class="result-thumbnail">
+        <p>${match.name}</p>
+        <a href="${match.link}" target="_blank">View Product</a>
+      `;
+      productList.appendChild(listItem);
+    });
+  }
+
+  resultSection.style.display = 'block';
+}
