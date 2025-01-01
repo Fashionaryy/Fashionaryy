@@ -1,4 +1,4 @@
-  document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
   const imageInput = document.getElementById('imageInput');
   const classifyButton = document.getElementById('classifyButton');
   const loadingSpinner = document.getElementById('loadingSpinner');
@@ -9,7 +9,7 @@
   const colorButtons = document.getElementById('colorButtons');
   const productList = document.getElementById('productList');
 
-  const dataset = [
+   const dataset = [
     {
       "name": "Black Coat 2",
       "category": "coats",
@@ -200,7 +200,7 @@
     "color": [[66, 51, 54], [56, 42, 46],[57, 41, 41],[35, 21, 20],[82, 66, 65]],
     "file": "matched_items/Dark Red Boots.png", 
     "link": "https://shop.mango.com/tr/tr/p/kadin/ayakkab%C4%B1/cizme-ve-bot/kare-uclu-deri-yar%C4%B1m-bot_87020250?c=32&utm_source=product-share&utm_medium=social"}, 
-  
+
   { 
     "name": "Dark Red Pants", 
     "category": "Pants", 
@@ -327,7 +327,7 @@
     "category": "Sweaters", 
     "color": [[237, 234, 227],[241,238,226],[206, 203, 190],[225, 223, 203],[238, 235, 220] ],
     "file": "matched_items/White Sweater 2.png", 
-    "link": "Ekru Kadın Dik Yaka Kazak Uzun Kollu Saç Örgü Desenli 5WAK90087HT | Koton"},
+    "link": "Ekru Kadın Dik Yaka Kazak Uzun Kollu Saç Örgü Desenli 5WAK90087HT | Koton"},
   ];
 
   const categories = ["coats", "sweaters", "boots", "pants", "skirts"];
@@ -349,22 +349,21 @@
       const img = new Image();
       img.src = event.target.result;
       img.onload = () => {
-        const topColors = analyzeAndGroupColors(img, 6, 100);
+        const dominantColors = extractDominantColors(img, 6);
         loadingSpinner.style.display = 'none';
 
-        console.log('Top Grouped Colors:', topColors.map(c => c.color));
+        console.log('Dominant Colors:', dominantColors);
         showCategories();
-        setupColorButtons(topColors.map(c => c.color));
+        setupColorButtons(dominantColors);
       };
     };
     reader.readAsDataURL(file);
   });
 
-  function analyzeAndGroupColors(img, numColors = 6, range = 100) {
+  function extractDominantColors(img, numColors) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    // Center region of the image for analysis
     const regionWidth = img.width * 0.5;
     const regionHeight = img.height * 0.5;
     const startX = (img.width - regionWidth) / 2;
@@ -377,62 +376,63 @@
     const imageData = ctx.getImageData(0, 0, regionWidth, regionHeight);
     const pixels = imageData.data;
 
-    // Analyze and group colors
-    const groupedColors = groupColorsByRange(pixels, range);
-
-    // Sort groups by most occurrences
-    const sortedGroups = Object.entries(groupedColors)
-      .sort((a, b) => b[1].count - a[1].count)
-      .slice(0, numColors);
-
-    // Extract top groups
-    const topColors = sortedGroups.map(([rgb, data]) => ({
-      color: rgb.split(',').map(Number),
-      count: data.count,
-    }));
-
-    return topColors;
+    return calculateDominantColors(pixels, numColors);
   }
 
-  function groupColorsByRange(pixels, range) {
-    const groupedColors = {};
+  function calculateDominantColors(pixels, numColors) {
+    const colorCounts = {};
+    const dominantColors = [];
 
     for (let i = 0; i < pixels.length; i += 4) {
-      const r = pixels[i];
-      const g = pixels[i + 1];
-      const b = pixels[i + 2];
+      const r = Math.round(pixels[i] / 10) * 10;
+      const g = Math.round(pixels[i + 1] / 10) * 10;
+      const b = Math.round(pixels[i + 2] / 10) * 10;
 
-      // Find a group or create a new one
-      const existingGroup = Object.keys(groupedColors).find((key) => {
-        const [groupR, groupG, groupB] = key.split(',').map(Number);
-        return (
-          Math.abs(r - groupR) <= range &&
-          Math.abs(g - groupG) <= range &&
-          Math.abs(b - groupB) <= range
-        );
-      });
-
-      if (existingGroup) {
-        groupedColors[existingGroup].count += 1;
-      } else {
-        const rgbKey = `${r},${g},${b}`;
-        groupedColors[rgbKey] = { count: 1 };
-      }
+      const rgb = `${r},${g},${b}`;
+      colorCounts[rgb] = (colorCounts[rgb] || 0) + 1;
     }
 
-    return groupedColors;
+    const sortedColors = Object.entries(colorCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, numColors);
+
+    sortedColors.forEach(([rgb]) => {
+      const [r, g, b] = rgb.split(',').map(Number);
+      dominantColors.push([r, g, b]);
+    });
+
+    return dominantColors;
   }
 
-  function filterDatasetByColorGroup(dataset, category, selectedColor, range = 100) {
-    return dataset.filter((item) => {
-      if (item.category !== category) return false;
+  function consolidateColors(colors, range) {
+    const consolidated = [];
 
-      return item.color.some((color) =>
-        Math.abs(color[0] - selectedColor[0]) <= range &&
-        Math.abs(color[1] - selectedColor[1]) <= range &&
-        Math.abs(color[2] - selectedColor[2]) <= range
+    colors.forEach((color) => {
+      const isSimilar = consolidated.some((existingColor) =>
+        Math.abs(color[0] - existingColor[0]) <= range &&
+        Math.abs(color[1] - existingColor[1]) <= range &&
+        Math.abs(color[2] - existingColor[2]) <= range
       );
+
+      if (!isSimilar) {
+        consolidated.push(color);
+      }
     });
+
+    return consolidated;
+  }
+
+  function mapColorToBasicName(rgb) {
+    const [r, g, b] = rgb;
+    if (r > 200 && g > 200 && b > 200) return "White";
+    if (r > 200 && g < 100 && b < 100) return "Red";
+    if (r < 100 && g > 200 && b < 100) return "Green";
+    if (r < 100 && g < 100 && b > 200) return "Blue";
+    if (r > 150 && g > 100 && b < 50) return "Brown";
+    if (r > 150 && g < 100 && b > 150) return "Pink";
+    if (r < 50 && g < 50 && b < 50) return "Black";
+    if (r > 100 && g > 100 && b > 100) return "Grey";
+    return "Other";
   }
 
   function showCategories() {
@@ -453,17 +453,25 @@
 
   function setupColorButtons(colors) {
     colorButtons.innerHTML = '';
-    const range = 100;
 
-    colors.forEach((rgb) => {
-      const button = document.createElement('button');
+    const range = 50;
+    const consolidatedColors = consolidateColors(colors, range);
+
+    const message = consolidatedColors.length === 1
+      ? "We've consolidated similar colors into one option."
+      : "Here are multiple distinct color options to choose from.";
+    alert(message);
+
+    consolidatedColors.forEach((rgb) => {
+      const colorName = mapColorToBasicName(rgb);
       const [r, g, b] = rgb;
-      button.textContent = `RGB(${r}, ${g}, ${b})`;
+      const button = document.createElement('button');
+      button.textContent = colorName;
       button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
       button.style.border = '2px solid black';
       button.className = 'color-button';
       button.addEventListener('click', () => {
-        selectedColor = rgb;
+        selectedColor = colorName === "Other" ? null : rgb;
         colorSection.style.display = 'none';
         showResults();
       });
@@ -474,14 +482,23 @@
   function showResults() {
     productList.innerHTML = '';
 
-    const range = 100;
+    const range = 50;
+    const matches = dataset.filter(item => {
+      if (!selectedColor) return item.category === selectedCategory;
 
-    const matches = filterDatasetByColorGroup(dataset, selectedCategory, selectedColor, range);
+      const itemColors = Array.isArray(item.color) ? item.color : [];
+      return item.category === selectedCategory &&
+        itemColors.some(color =>
+          Math.abs(color[0] - selectedColor[0]) <= range &&
+          Math.abs(color[1] - selectedColor[1]) <= range &&
+          Math.abs(color[2] - selectedColor[2]) <= range
+        );
+    });
 
     if (matches.length === 0) {
-      productList.innerHTML = '<li>No matches found. Please try another image or select "Other".</li>';
+      productList.innerHTML = '<li>No matches found. Please try again with a better picture or look through the help section.</li>';
     } else {
-      matches.forEach((match) => {
+      matches.forEach(match => {
         const listItem = document.createElement('li');
         listItem.innerHTML = `
           <img src="${match.file}" alt="${match.name}" class="result-thumbnail">
@@ -491,7 +508,6 @@
         productList.appendChild(listItem);
       });
     }
-
     resultSection.style.display = 'block';
   }
 });
