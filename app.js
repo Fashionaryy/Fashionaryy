@@ -44,7 +44,7 @@
   "color": [[1, 1, 1],[36, 44, 52],[36, 43, 50],[34, 39, 44],[34, 41, 49]], 
   "file": "matched_items/Black Pants 2.png", 
   "link": "https://www.zara.com/tr/tr/suni-deri-genis-paca-pantolon-zw-koleksiyonu-p03581041.html?v1=415395144&utm_campaign=productShare&utm_medium=mobile_sharing_iOS&utm_source=red_social_movil"
-}
+},
 {   "name": "Black Pants 3", 
     "category": "Pants", 
     "color": [[1, 1, 1],[30, 31, 33],[23, 23, 25],[34, 35, 37],[38, 43, 45]],
