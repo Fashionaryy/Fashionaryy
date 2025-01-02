@@ -409,6 +409,63 @@
     return "Other";
   }
 
+  function showCategories() {
+    categoryButtons.innerHTML = '';
+    categories.forEach(category => {
+      const button = document.createElement('button');
+      button.textContent = category;
+      button.className = 'category-button';
+      button.addEventListener('click', () => {
+        selectedCategory = category;
+        colorSection.style.display = 'block';
+        categorySection.style.display = 'none';
+      });
+      categoryButtons.appendChild(button);
+    });
+    categorySection.style.display = 'block';
+  }
+
+  function setupColorButtons(colors) {
+    colorButtons.innerHTML = '';
+
+    const range = 50;
+    const consolidatedColors = consolidateColors(colors, range);
+
+    consolidatedColors.forEach((rgb) => {
+      const colorName = mapColorToBasicName(rgb);
+      const [r, g, b] = rgb;
+      const button = document.createElement('button');
+      button.textContent = colorName;
+      button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+      button.style.border = '2px solid black';
+      button.className = 'color-button';
+      button.addEventListener('click', () => {
+        selectedColor = colorName === "Other" ? null : rgb;
+        colorSection.style.display = 'none';
+        showResults();
+      });
+      colorButtons.appendChild(button);
+    });
+  }
+
+  function consolidateColors(colors, range) {
+    const consolidated = [];
+
+    colors.forEach((color) => {
+      const isSimilar = consolidated.some((existingColor) =>
+        Math.abs(color[0] - existingColor[0]) <= range &&
+        Math.abs(color[1] - existingColor[1]) <= range &&
+        Math.abs(color[2] - existingColor[2]) <= range
+      );
+
+      if (!isSimilar) {
+        consolidated.push(color);
+      }
+    });
+
+    return consolidated;
+  }
+
   function showResults() {
     productList.innerHTML = '';
     const range = 50;
@@ -438,4 +495,7 @@
     }
     resultSection.style.display = 'block';
   }
+
+  // Show categories when the page loads
+  showCategories();
 });
