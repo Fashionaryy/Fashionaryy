@@ -379,113 +379,41 @@
     return calculateDominantColors(pixels, numColors);
   }
 
-  function calculateDominantColors(pixels, numColors) {
+ function calculateDominantColors(pixels, numColors) {
     const colorCounts = {};
-    const dominantColors = [];
-
     for (let i = 0; i < pixels.length; i += 4) {
       const r = Math.round(pixels[i] / 10) * 10;
       const g = Math.round(pixels[i + 1] / 10) * 10;
       const b = Math.round(pixels[i + 2] / 10) * 10;
-
       const rgb = `${r},${g},${b}`;
       colorCounts[rgb] = (colorCounts[rgb] || 0) + 1;
     }
 
-    const sortedColors = Object.entries(colorCounts)
+    return Object.entries(colorCounts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, numColors);
-
-    sortedColors.forEach(([rgb]) => {
-      const [r, g, b] = rgb.split(',').map(Number);
-      dominantColors.push([r, g, b]);
-    });
-
-    return dominantColors;
-  }
-
-  function consolidateColors(colors, range) {
-    const consolidated = [];
-
-    colors.forEach((color) => {
-      const isSimilar = consolidated.some((existingColor) =>
-        Math.abs(color[0] - existingColor[0]) <= range &&
-        Math.abs(color[1] - existingColor[1]) <= range &&
-        Math.abs(color[2] - existingColor[2]) <= range
-      );
-
-      if (!isSimilar) {
-        consolidated.push(color);
-      }
-    });
-
-    return consolidated;
+      .slice(0, numColors)
+      .map(([rgb]) => rgb.split(',').map(Number));
   }
 
   function mapColorToBasicName(rgb) {
     const [r, g, b] = rgb;
+    const distance = Math.sqrt(r ** 2 + g ** 2 + b ** 2);
+    if (distance < 30) return "Black";
     if (r > 200 && g > 200 && b > 200) return "White";
     if (r > 200 && g < 100 && b < 100) return "Red";
     if (r < 100 && g > 200 && b < 100) return "Green";
     if (r < 100 && g < 100 && b > 200) return "Blue";
     if (r > 150 && g > 100 && b < 50) return "Brown";
     if (r > 150 && g < 100 && b > 150) return "Pink";
-    if (r < 50 && g < 50 && b < 50) return "Black";
     if (r > 100 && g > 100 && b > 100) return "Grey";
     return "Other";
   }
 
-  function showCategories() {
-    categoryButtons.innerHTML = '';
-    categories.forEach(category => {
-      const button = document.createElement('button');
-      button.textContent = category;
-      button.className = 'category-button';
-      button.addEventListener('click', () => {
-        selectedCategory = category;
-        colorSection.style.display = 'block';
-        categorySection.style.display = 'none';
-      });
-      categoryButtons.appendChild(button);
-    });
-    categorySection.style.display = 'block';
-  }
-
-  function setupColorButtons(colors) {
-    colorButtons.innerHTML = '';
-
-    const range = 50;
-    const consolidatedColors = consolidateColors(colors, range);
-
-    const message = consolidatedColors.length === 1
-      ? "We've consolidated similar colors into one option."
-      : "Here are multiple distinct color options to choose from.";
-    alert(message);
-
-    consolidatedColors.forEach((rgb) => {
-      const colorName = mapColorToBasicName(rgb);
-      const [r, g, b] = rgb;
-      const button = document.createElement('button');
-      button.textContent = colorName;
-      button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-      button.style.border = '2px solid black';
-      button.className = 'color-button';
-      button.addEventListener('click', () => {
-        selectedColor = colorName === "Other" ? null : rgb;
-        colorSection.style.display = 'none';
-        showResults();
-      });
-      colorButtons.appendChild(button);
-    });
-  }
-
   function showResults() {
     productList.innerHTML = '';
-
     const range = 50;
     const matches = dataset.filter(item => {
       if (!selectedColor) return item.category === selectedCategory;
-
       const itemColors = Array.isArray(item.color) ? item.color : [];
       return item.category === selectedCategory &&
         itemColors.some(color =>
@@ -496,7 +424,7 @@
     });
 
     if (matches.length === 0) {
-      productList.innerHTML = '<li>No matches found. Please try again with a better picture or look through the help section.</li>';
+      productList.innerHTML = '<li>No matches found. Try another image or category.</li>';
     } else {
       matches.forEach(match => {
         const listItem = document.createElement('li');
