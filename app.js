@@ -185,7 +185,7 @@
   { 
     "name": "Camo Coat", 
     "category": "coats", 
-    "color": [77, 74, 71],
+    "color": [[77, 74, 71],[79, 74, 74],[24, 21, 24],[168, 168, 167],[85, 83, 98]]
     "file": "matched_items/Camo Coat.png", 
     "link": "https://www.bershka.com/tr/desenli-suni-y%C3%BCnl%C3%BC-ceket-c0p167311560.html?colorId=800" },
    { 
@@ -259,7 +259,7 @@
    { 
     "name": "Red Coat", 
     "category": "coats", 
-    "color": [[38, 10, 16],[50, 12, 21]],
+    "color": [[38, 10, 16],[50, 12, 21],[44, 6, 17], [39, 6 ,13],[49, 7, 17]],
     "file": "matched_items/Red Coat.png", 
     "link": "https://www.bershka.com/tr/c0p167582954.html?colorId=605"},
        { 
@@ -395,18 +395,24 @@
       .map(([rgb]) => rgb.split(',').map(Number));
   }
 
-  function mapColorToBasicName(rgb) {
-    const [r, g, b] = rgb;
-    const distance = Math.sqrt(r ** 2 + g ** 2 + b ** 2);
-    if (distance < 30) return "Black";
-    if (r > 200 && g > 200 && b > 200) return "White";
-    if (r > 200 && g < 100 && b < 100) return "Red";
-    if (r < 100 && g > 200 && b < 100) return "Green";
-    if (r < 100 && g < 100 && b > 200) return "Blue";
-    if (r > 150 && g > 100 && b < 50) return "Brown";
-    if (r > 150 && g < 100 && b > 150) return "Pink";
-    if (r > 100 && g > 100 && b > 100) return "Grey";
-    return "Other";
+ function mapColorToBasicName(rgb) {
+  const [r, g, b] = rgb;
+  const distance = Math.sqrt(r ** 2 + g ** 2 + b ** 2);
+
+  if (distance < 30) return "Black";  // Very dark colors
+  if (r > 200 && g > 200 && b > 200) return "White";
+  if (r > 200 && g < 100 && b < 100) return "Red";
+  if (r > 150 && r < 200 && g < 50 && b < 50) return "Dark Red";  // New Category
+  if (r > 200 && g > 180 && b < 120) return "Beige";
+  if (r < 100 && g > 200 && b < 100) return "Green";
+  if (r < 100 && g < 100 && b > 200) return "Blue";
+  if (r > 150 && g > 100 && b < 50) return "Brown";
+  if (r > 180 && g > 150 && b < 100) return "Light Brown";  // New Category
+  if (r < 50 && g < 50 && b > 150) return "Dark Blue";
+  if (r > 180 && g > 180 && b > 180 && distance < 250) return "Light Grey";
+  if (r > 150 && g < 100 && b > 150) return "Pink";
+  if (r > 100 && g > 100 && b > 100) return "Grey"; 
+   return "Other";
   }
 
   function showCategories() {
