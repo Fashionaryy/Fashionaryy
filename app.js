@@ -185,7 +185,7 @@
   { 
     "name": "Camo Coat", 
     "category": "coats", 
-    "color": [[77, 74, 71],[79, 74, 74],[24, 21, 24],[168, 168, 167],[85, 83, 98]]
+    "color": [[77, 74, 71],[79, 74, 74],[24, 21, 24],[168, 168, 167],[85, 83, 98]],
     "file": "matched_items/Camo Coat.png", 
     "link": "https://www.bershka.com/tr/desenli-suni-y%C3%BCnl%C3%BC-ceket-c0p167311560.html?colorId=800" },
    { 
